@@ -1,0 +1,263 @@
+3rd floor router
+
+en 
+conf t
+int s0/2/0
+ip add 10.10.10.11 255.255.255.252
+clock rate 64000
+no shut
+exit
+
+int s0/2/1
+ip add 10.10.10.6 255.255.255.252
+clock rate 64000
+no shut
+exit
+
+
+int gig0/0
+no shut
+
+int gig0/0.10
+encapsulation dotlQ 10
+ip add 192.168.1.1 255.255.255.0
+ex
+
+int gig0/0.20
+encapsulation dotlQ 20
+ip add 192.168.2.1 255.255.255.0
+exit
+
+service dhcp
+ip dhcp pool IT
+network 192.168.1.0 255.255.255.0
+default-router 192.168.1.1
+dns-server 192.168.1.1
+
+exit
+
+
+ip dhcp pool Admin
+network 192.168.2.0 255.255.255.0
+default-router 192.168.2.1
+dns-server 192.168.2.1
+exit
+
+router ospf 10
+network 10.10.10.4 255.255.255.252 area 0
+network 10.10.10.0 255.255.255.252 area 0
+network 192.168.1.0 255.255.255.0 area 0
+network 192.168.2.0 255.255.255.0 area 0
+
+
+
+
+
+1st floor route 
+
+en 
+conf t
+int s0/2/0
+ip add 10.10.10.5 255.255.255.252
+no shut
+exit
+
+int s0/2/1
+ip add 10.10.10.9 255.255.255.252
+no shut
+exit
+
+int gig0/0
+no shut
+exit
+
+int gig0/0.80
+encapsulation dotlQ 80
+ip add 192.168.8.1 255.255.255.0
+exit
+
+
+
+int gig0/0.70
+encapsulation dotlQ 80
+ip add 192.168.7.1 255.255.255.0
+exit
+
+int gig0/0.60
+encapsulation dotlQ 60
+ip add 192.168.6.1 255.255.255.0
+exit
+
+do wr
+
+service dhcp
+ip dhcp pool  Reception
+network 192.168.8.0 255.255.255.0
+default-router 192.168.8.1 
+dns-server 192.168.8.1
+exit
+
+ip dhcp pool Store 
+network 192.168.7.0 255.255.255.0
+default-router 192.168.7.1 
+dns-server 192.168.7.1
+exit
+
+dhcp pool Logistics
+network 192.168.6.0 255.255.255.0
+default-router 192.168.6.1
+dns-server 192.168.6.1
+ip dhcp pool Logistics
+
+
+router ospf 10
+network 10.10.10.4 255.255.255.252 area 0
+network 10.10.10.8 255.255.255.252 area 0
+network 192.168.8.0 255.255.255.0 area 0
+network 192.168.7.0 255.255.255.0 area 0
+network 192.168.6.0 255.255.255.0 area 0
+
+do wr
+
+2nd floor router
+
+en
+conf t
+int s0/2/0
+ip add 10.10.10.1 255.255.255.252
+no shut
+exit
+
+int s0/2/1
+ip add 10.10.10.10 255.255.255.252
+clock rate 64000
+no shut
+exit
+
+
+int gig0/0
+no shut
+
+
+int gig0/0.30
+encapsulation dotlQ 30
+ip address 192.168.3.1 255.255.255.0
+exit
+
+int gig0/0.40
+encapsulation dotlq 40
+ip address 192.168.4.1 255.255.255.0
+exit
+
+int gig0/0.50
+encapsulation dotlQ 50
+ip address 192.168.5.1 255.255.255.0
+exit
+
+
+service dhcp
+ip dhcp pool Finance
+network 192.168.5.0 255.255.255.0
+default-router 192.168.5.1
+dns-server 192.168.5.1
+
+exit
+
+ip dhcp pool HR
+network 192.168.4.0 255.255.255.0
+default-router 192.168.4.1
+dns-server 192.168.4.1
+exit
+
+
+ip dhcp pool sales
+network 192.168.3.0 255.255.255.0
+default-router 192.168.3.1
+dns-server 192.168.3.1
+exit
+
+do wr
+
+
+router ospf 10
+network 10.10.10.10 255.255.255.252 area 0
+neteork 10.10.10.8 255.255.255.252 area 0
+network 192.168.3.0 255.255.255.0 area 0
+network 192.168.4.0 255.255.255.0 area 0
+network 192.168.5.0 255.255.255.0 area 0
+
+
+
+
+
+
+
+
+1st floor sw
+
+en 
+conf t
+
+int range fa0/2-3
+switchport mode access
+switchport access vlan 80
+
+
+int range fa0/4-5
+switchport mode access
+switchport access vlan 70
+
+int range fa0/6-8
+switchport mode access
+switchport access vlan 60
+
+int f0/1
+switchport mode trunk
+
+
+2nd floor sw
+
+en
+conf t
+
+int range fa0/2-3
+switchport mode access
+switchport access vlan 50
+
+
+int range fa0/4-5
+switchport mode access
+switchport access vlan 40
+
+int range fa0/6-8
+switchport mode access
+switchport access vlan 30
+
+int f0/1
+switchport mode trunk
+
+
+3rd floor sw
+
+en
+conf t
+
+int range fa0/2-3
+switchport mode access
+switchport access vlan 10
+
+
+int range fa0/4-6
+switchport mode access
+switchport access vlan 20
+
+
+int f0/1
+switchport mode trunk
+
+
+
+
+
+
+
